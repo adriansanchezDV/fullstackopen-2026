@@ -6,7 +6,7 @@ Repositorio del curso **Full Stack Open** - University of Helsinki
 ## Progreso
 
 - [x] Part 0 - Fundamentals of Web apps
-- [ ] Part 1 - Introduction to React
+- [x] Part 1 - Introduction to React
 - [ ] Part 2 - Communicating with server
 - [ ] Part 3 - Programming a server with NodeJS and Express
 - [ ] Part 4 - Testing Express servers, user administration
@@ -15,6 +15,10 @@ Repositorio del curso **Full Stack Open** - University of Helsinki
 - [ ] Part 7 - React router, custom hooks, styling app with CSS and webpack
 - [ ] Part 8 - GraphQL
 - [ ] Part 9 - TypeScript
+- [ ] Part 10 - React Native
+- [ ] Part 11 - CI/CD
+- [ ] Part 12 - Containers
+- [ ] Part 13 - Relational Databases
 
 
 ## Tecnologías que voy a usar
