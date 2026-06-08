@@ -111,6 +111,8 @@ const App = () => {
         setMessage(null)
           }, 5000)
       }).catch(error => {
+  console.log(error)
+
   setMessageType('error')
 
   setMessage(

@@ -9,10 +9,13 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    noteService.getAll().then((initialNotes) => {
-      setNotes(initialNotes)
-    })
-  }, [])
+  noteService.getAll().then((initialNotes) => {
+    console.log('initialNotes:', initialNotes)
+    console.log('isArray:', Array.isArray(initialNotes))
+
+    setNotes(initialNotes)
+  })
+}, [])
 
   const addNote = (event) => {
     event.preventDefault()
