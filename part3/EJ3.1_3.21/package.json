@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "ej",
   "version": "1.0.0",
   "description": "",
@@ -16,9 +15,5 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "morgan": "^1.10.1"
-=======
-  "dependencies": {
-    "axios": "^1.16.1"
->>>>>>> 76f4c504f9304b8da3fd146913f5eec50dc83148
   }
 }
