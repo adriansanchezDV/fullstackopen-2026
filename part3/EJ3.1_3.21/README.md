@@ -4,7 +4,7 @@ Backend for the Phonebook application (Full Stack Open Part 3).
 
 ## 🌍 Live API
 
-https://fullstackopen-2026-fhfq.onrender.com
+https://fullstackopen-2026-fhfq.onrender.com/api/persons
 
 ## 📌 Endpoints
 
