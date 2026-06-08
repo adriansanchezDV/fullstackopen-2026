@@ -14,12 +14,6 @@ morgan.token('body', (req) => JSON.stringify(req.body))
 const customFormat = ':method :url :status :response-time ms - :body'
 app.use(morgan(customFormat))
 
-// Servir frontend estático (React build)
-app.use(express.static('dist'))
-
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
-})
 
 // Datos en memoria
 let persons = [
@@ -84,6 +78,8 @@ app.get('/info', (req, res) => {
     `<p>Phonebook has info for ${persons.length} people</p><p>${date}</p>`
   )
 })
+
+app.use(express.static(path.join(__dirname, 'dist')))
 
 // SPA fallback (React routing)
 app.get('*', (req, res) => {
