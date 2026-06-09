@@ -59,20 +59,19 @@ app.post('/api/persons', (req, res) => {
 })
 
 // DELETE
-app.delete('/api/persons/:id', (req, res) => {
+  app.delete('/api/persons/:id', (req, res, next) => {
+  console.log("DELETE BACKEND HIT:", req.params.id)
+
   Person.findByIdAndDelete(req.params.id)
-    .then(() => res.status(204).end())
+    .then(result => {
+      console.log("DELETED:", result)
+      res.status(204).end()
+    })
+    .catch(next)
 })
 
-// INFO
-app.get('/info', (req, res) => {
-  Person.countDocuments({}).then(count => {
-    res.send(`
-      <p>Phonebook has info for ${count} people</p>
-      <p>${new Date()}</p>
-    `)
-  })
-})
+
+
 
 // =======================
 // FRONTEND (BUILD)
