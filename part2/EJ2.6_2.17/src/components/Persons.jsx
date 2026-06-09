@@ -13,11 +13,6 @@ const Persons = (props) => {
                  
             </li>)}
    
-
-      
-
-      
-      
     
  </ul>
       )
