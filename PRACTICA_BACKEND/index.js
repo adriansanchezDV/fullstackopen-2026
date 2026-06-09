@@ -10,6 +10,7 @@ app.use(express.json())
 app.use(express.static('dist'))
 
 
+console.log("INDEX.JS IS RUNNING")
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello world !</h1>')
@@ -21,7 +22,7 @@ app.get('/api/notes', (request, response) => {
   })
 })
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
   Note.findById(request.params.id)
     .then(note => {
       if (note) {
@@ -30,11 +31,9 @@ app.get('/api/notes/:id', (request, response) => {
         response.status(404).end()
       }
     })
-     .catch(error => {
-      console.log(error)
-      response.status(500).end()
+     .catch(error => next(error))
     })
-})
+
 
 app.delete('/api/notes/:id', (request, response) => {
   Note.findByIdAndDelete(request.params.id)
@@ -48,6 +47,18 @@ const generateId = () => {
     : 0
   return String(maxId + 1)
 }
+app.put('/api/notes/:id', (req, res, next) => {
+   console.log("PUT HIT:", req.params.id)
+  const { important } = req.body
+
+  Note.findByIdAndUpdate(
+    req.params.id,
+    { important },
+    { new: true }
+  )
+    .then(updatedNote => res.json(updatedNote))
+    .catch(error => next(error))
+})
 
 app.post('/api/notes', (request, response) => {
   const body = request.body
@@ -67,6 +78,19 @@ app.post('/api/notes', (request, response) => {
     response.json(savedNote)
   })
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// este debe ser el último middleware cargado, ¡también todas las rutas deben ser registrada antes que esto!
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
