@@ -11,18 +11,15 @@ mongoose.connect(url)
   .catch(error => {
     console.log('error connecting to MongoDB:', error.message)
   })
-
 const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
+  content: {
+    type: String,
+    required: true,
+    minLength: 5
+  },
+  important: Boolean
 })
 
-/*
-Transforma el objeto MongoDB para el frontend:
-- convierte _id -> id
-- elimina _id
-- elimina __v
-*/
 
 noteSchema.set('toJSON', {
   transform: (document, returnedObject) => {
