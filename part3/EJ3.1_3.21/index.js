@@ -5,6 +5,8 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const cors = require('cors')
 const path = require('path')
+const errorHandler = require('./middleware/errorHandler')
+
 
 const Person = require('./models/person')
 
@@ -70,8 +72,37 @@ app.post('/api/persons', (req, res) => {
     .catch(next)
 })
 
+// UPDATE
+app.put('/api/persons/:id', (req, res, next) => {
+  const { name, number } = req.body
 
+  const updatedPerson = {
+    name,
+    number
+  }
 
+  Person.findByIdAndUpdate(req.params.id, updatedPerson, {
+    returnDocument: 'after',
+    runValidators: true,
+    context: 'query'
+  })
+    .then(result => {
+      res.json(result)
+    })
+    .catch(next)
+})
+
+//Info 
+app.get('/info', (req, res, next) => {
+  Person.countDocuments({})
+    .then(count => {
+      res.send(`
+        <p>Phonebook has info for ${count} people</p>
+        <p>${new Date()}</p>
+      `)
+    })
+    .catch(next)
+})
 
 // =======================
 // FRONTEND (BUILD)
@@ -81,6 +112,12 @@ app.use(express.static(path.join(__dirname, 'dist')))
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
 })
+
+
+// =======================
+// ERROR HANDLER
+// =======================
+app.use(errorHandler)
 
 // =======================
 // START SERVER
