@@ -48,7 +48,7 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 // CREATE
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const { name, number } = req.body
 
   if (!name || !number) {
@@ -57,7 +57,9 @@ app.post('/api/persons', (req, res) => {
 
   const person = new Person({ name, number })
 
-  person.save().then(saved => res.json(saved))
+  person.save()
+    .then(saved => res.json(saved))
+    .catch(next)   // 🔥 ESTO ES CLAVE
 })
 
 // DELETE

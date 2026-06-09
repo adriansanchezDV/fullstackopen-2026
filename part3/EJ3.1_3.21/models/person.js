@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const phoneRegex = /^\d{2,3}-\d{5,8}$/
 
 const personSchema = new mongoose.Schema({
   name: {
@@ -8,7 +9,14 @@ const personSchema = new mongoose.Schema({
   },
   number: {
     type: String,
-    required: true
+    required: true,
+    validate: {
+      validator: function (v) {
+        return phoneRegex.test(v)
+      },
+      message: props =>
+        `${props.value} is not a valid phone number. Use format XX-XXXXXXX or XXX-XXXXXXXX`
+    }
   }
 })
 
