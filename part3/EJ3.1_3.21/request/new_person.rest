@@ -1,7 +1,0 @@
-POST https://fullstackopen-2026-fhfq.onrender.com/api/persons
-Content-Type: application/json
-
-{
-  "name": "irene GAY",
-  "number": "123-456"
-}
