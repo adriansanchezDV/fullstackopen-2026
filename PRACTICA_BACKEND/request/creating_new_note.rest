@@ -1,7 +1,11 @@
 POST http://localhost:3001/api/notes
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlcGUiLCJpZCI6IjZhMzE0NzJjMGUwYjRlNmI0ZTBhOTMzZCIsImlhdCI6MTc4MTYyMjcxM30.fav0zCbYgvF7LVgFK8GQgJJ_6fh6y7XFcjsT6kJOjTE
+
 Content-Type: application/json
 
 {
-  "content": "Proximamente se añadirá la funcionalidad de eliminar notas",
-  "important": true
+  "content": "Nota de Juan 3",
+  "important": true,
+  "userId": "6a31472c0e0b4e6b4e0a933d"
 }
