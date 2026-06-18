@@ -59,7 +59,7 @@ app.post('/api/persons', (req, res, next) => {
 
   person.save()
     .then(saved => res.json(saved))
-    .catch(next)   // 🔥 ESTO ES CLAVE
+    .catch(next)   // 
 })
 
 // DELETE
