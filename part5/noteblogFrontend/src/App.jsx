@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import NewBlogForm from './components/NewBlog'
+import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -13,10 +13,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const newBlogFormRef = useRef()
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('success')
 
@@ -64,6 +60,7 @@ const App = () => {
       setPassword('')
 
       showNotification(`Welcome ${user.name}`)
+    // eslint-disable-next-line no-unused-vars
     } catch (exception) {
       showNotification('Wrong username or password', 'error')
     }
@@ -75,33 +72,22 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
+  const addBlog = async (blogObject) => {
+  try {
+    const returnedBlog = await blogService.create(blogObject)
 
-    try {
-      const blogObject = {
-        title,
-        author,
-        url,
-      }
+    setBlogs(blogs.concat(returnedBlog))
 
-      const returnedBlog = await blogService.create(blogObject)
+    newBlogFormRef.current.toggleVisibility()
 
-      setBlogs(blogs.concat(returnedBlog))
-
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-
-      newBlogFormRef.current.toggleVisibility()
-
-      showNotification(
-        `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`
-      )
-    } catch (exception) {
-      showNotification('Error creating blog', 'error')
-    }
+    showNotification(
+      `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`
+    )
+  // eslint-disable-next-line no-unused-vars
+  } catch (exception) {
+    showNotification('Error creating blog', 'error')
   }
+}
 
   if (user === null) {
     return (
@@ -153,6 +139,36 @@ const App = () => {
     )
   }
 
+  const likeBlog = async (blog) => {
+  const updatedBlog = {
+    ...blog,
+    likes: blog.likes + 1,
+    user: blog.user.id, 
+  }
+
+  const returnedBlog = await blogService.update(blog.id, updatedBlog)
+
+   setBlogs(prev =>
+    prev.map(b => b.id === blog.id ? returnedBlog : b)
+  )
+}
+
+const blogsToShow = [...blogs].sort((a, b) => b.likes - a.likes)
+
+const deleteBlog = async (id) => {
+  const blog = blogs.find(b => b.id === id)
+
+  const ok = window.confirm(`Delete '${blog.title}' by ${blog.author}?`)
+  if (!ok) return
+
+  try {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(b => b.id !== id))
+  } catch (error) {
+    showNotification('Error deleting blog', 'error')
+  }
+}
+
   return (
     <div className="container">
 
@@ -184,22 +200,19 @@ const App = () => {
 
     <NewBlogForm
       addBlog={addBlog}
-      title={title}
-      setTitle={setTitle}
-      author={author}
-      setAuthor={setAuthor}
-      url={url}
-      setUrl={setUrl}
     />
   </Togglable>
 </div>
 
       <h2>Blogs</h2>
 
-      {blogs.map(blog => (
+      {blogsToShow.map(blog => (
         <Blog
           key={blog.id}
           blog={blog}
+          likeBlog={likeBlog}
+          deleteBlog={deleteBlog}
+          user={user}
         />
       ))}
 

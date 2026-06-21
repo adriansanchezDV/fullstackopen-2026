@@ -1,14 +1,29 @@
-const NewBlogForm = ({
-  addBlog,
-  title,
-  setTitle,
-  author,
-  setAuthor,
-  url,
-  setUrl,
-}) => {
+import { useState } from 'react'
+
+
+
+const NewBlogForm = ({ addBlog }) => {
+ 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const createBlog = (event) => {
+    event.preventDefault()
+
+    addBlog({
+      title,
+      author,
+      url,
+    })  
+
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+  
   return (
-    <form onSubmit={addBlog}>
+    <form onSubmit={createBlog}>
 
       <div className="form-group">
         <label>Title</label>
