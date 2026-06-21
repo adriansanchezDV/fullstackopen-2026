@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import NewBlogForm from './components/NewBlog'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 import './index.css'
 
 const App = () => {
@@ -11,7 +12,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-
+  const newBlogFormRef = useRef()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -92,6 +93,8 @@ const App = () => {
       setAuthor('')
       setUrl('')
 
+      newBlogFormRef.current.toggleVisibility()
+
       showNotification(
         `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`
       )
@@ -171,21 +174,25 @@ const App = () => {
         </button>
       </div>
 
+      
       <div className="card">
+  <Togglable
+    buttonLabel="new blog"
+    ref={newBlogFormRef}
+  >
+    <h2>Create new blog</h2>
 
-        <h2>Create new blog</h2>
-
-        <NewBlogForm
-          addBlog={addBlog}
-          title={title}
-          setTitle={setTitle}
-          author={author}
-          setAuthor={setAuthor}
-          url={url}
-          setUrl={setUrl}
-        />
-
-      </div>
+    <NewBlogForm
+      addBlog={addBlog}
+      title={title}
+      setTitle={setTitle}
+      author={author}
+      setAuthor={setAuthor}
+      url={url}
+      setUrl={setUrl}
+    />
+  </Togglable>
+</div>
 
       <h2>Blogs</h2>
 
@@ -197,6 +204,7 @@ const App = () => {
       ))}
 
     </div>
+    
   )
 }
 

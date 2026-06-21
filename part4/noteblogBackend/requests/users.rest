@@ -8,42 +8,21 @@ POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "pepe123",
-  "name": "Pepe García",
+  "username": "Juan123",
+  "name": "Juan García",
   "password": "secret123"
 }
 
 ###
-
-### CREATE user (sin password -> ERROR)
 POST http://localhost:3003/api/users
 Content-Type: application/json
 
 {
-  "username": "sinpass",
-  "name": "Error User"
-}
-
-###
-
-### CREATE user (password corto -> ERROR)
-POST http://localhost:3003/api/users
-Content-Type: application/json
-
-{
-  "username": "shortpass",
-  "name": "Error User",
-  "password": "ab"
-}
-
-###
-
-### CREATE user (username duplicado -> ERROR)
-POST http://localhost:3003/api/users
-Content-Type: application/json
-
-{
-  "username": "pepe123",
-  "name": "Duplicado",
+  "username": "mario123",
+  "name": "Mario",
   "password": "secret123"
 }
+
+
+
+
