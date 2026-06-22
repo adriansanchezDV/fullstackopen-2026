@@ -164,6 +164,7 @@ const deleteBlog = async (id) => {
   try {
     await blogService.remove(id)
     setBlogs(blogs.filter(b => b.id !== id))
+  // eslint-disable-next-line no-unused-vars
   } catch (error) {
     showNotification('Error deleting blog', 'error')
   }
