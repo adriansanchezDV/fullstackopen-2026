@@ -5,7 +5,8 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import NoteForm from './components/NoteForm'
-
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -14,6 +15,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const noteFormRef = useRef()
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('success') 
 
 
 
@@ -75,39 +78,53 @@ const App = () => {
 
 
   const handleLogin = async (event) => {
-    event.preventDefault()
+  event.preventDefault()
 
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
+  try {
+    const user = await loginService.login({
+      username,
+      password,
+    })
 
-      window.localStorage.setItem(
-        'loggedNoteappUser',
-        JSON.stringify(user)
-      )
+    window.localStorage.setItem(
+      'loggedNoteappUser',
+      JSON.stringify(user)
+    )
 
+    noteService.setToken(user.token)
 
+    setUser(user)
+    setUsername('')
+    setPassword('')
 
-      noteService.setToken(user.token)
+    setMessage('Has iniciado sesión')
+    setMessageType('success')
 
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      // eslint-disable-next-line no-undef
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        console.log(exception)
-        // eslint-disable-next-line no-undef
-        setErrorMessage(null)
-      }, 5000)
-    }
+    setTimeout(() => setMessage(null), 5000)
+
+  } catch (exception) {
+    setMessage('wrong credentials')
+    setMessageType('error')
+
+    setTimeout(() => setMessage(null), 5000)
   }
+}
 
+  const handleLogout = () => {
+  window.localStorage.removeItem('loggedNoteappUser')
+  noteService.setToken(null)
+  setUser(null)
 
+  
+  setMessage('Has cerrado sesión')
+  setMessageType('success')
+
+  setTimeout(() => setMessage(null), 5000)
+}
   const loginForm = () => (
     <Togglable buttonLabel="log in">
+     
+
       <LoginForm
         username={username}
         password={password}
@@ -132,6 +149,11 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+
+       <Notification
+          message={message}
+          type={messageType}
+        />
 
       {user === null
         ? loginForm()
@@ -158,6 +180,9 @@ const App = () => {
           />
         ))}
       </ul>
+
+
+      <button onClick={handleLogout}>Log out</button>
 
     </div>
   )
