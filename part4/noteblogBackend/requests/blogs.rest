@@ -8,48 +8,25 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Primer blog",
-  "author": "Pepe",
+  "title": "ef3w4fg4ve42w32fcwe32",
+  "author": "Juan García",
   "url": "https://ejemplo.com",
   "likes": 5
 }
 
 ###
-
-### CREATE blog (sin title -> ERROR)
+### CREATE BLOG
 POST http://localhost:3003/api/blogs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMyIsImlkIjoiNmE0YTljMDYxNjI4NjVlMTFhMDRjMWMwIiwiaWF0IjoxNzgzMjc1NzIxfQ.HkhsuARt6aHBYfKFIZnr9oMG-kFL7-q8wXN8FprpOws
 Content-Type: application/json
 
 {
-  "author": "Pepe",
-  "url": "https://ejemplo.com"
-}
-
-###
-
-### CREATE blog (sin url -> ERROR)
-POST http://localhost:3003/api/blogs
-Content-Type: application/json
-
-{
-  "title": "Blog sin URL",
-  "author": "Pepe"
-}
-
-###
-
-### UPDATE blog (cambia likes)
-PUT http://localhost:3003/api/blogs/REEMPLAZA_ID
-Content-Type: application/json
-
-{
-  "title": "Primer blog actualizado",
-  "author": "Pepe",
+  "title": "Blog protegido 2",
+  "author": "Adri",
   "url": "https://ejemplo.com",
-  "likes": 999
+  "likes": 10
 }
 
 ###
-
-### DELETE blog
-DELETE http://localhost:3003/api/blogs/REEMPLAZA_ID
+DELETE http://localhost:3003/api/blogs/6a4aa0ed162865e11a04c1c2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMyIsImlkIjoiNmE0YTljMDYxNjI4NjVlMTFhMDRjMWMwIiwiaWF0IjoxNzgzMjc1NzIxfQ.HkhsuARt6aHBYfKFIZnr9oMG-kFL7-q8wXN8FprpOws

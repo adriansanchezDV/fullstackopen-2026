@@ -12,14 +12,20 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+
   const newBlogFormRef = useRef()
+
   const [message, setMessage] = useState(null)
   const [messageType, setMessageType] = useState('success')
 
+  
+
+  // cargar blogs
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
+  // cargar usuario logueado
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
 
@@ -39,14 +45,12 @@ const App = () => {
     }, 5000)
   }
 
+  // LOGIN
   const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
+      const user = await loginService.login({ username, password })
 
       window.localStorage.setItem(
         'loggedBlogAppUser',
@@ -60,45 +64,74 @@ const App = () => {
       setPassword('')
 
       showNotification(`Welcome ${user.name}`)
-    // eslint-disable-next-line no-unused-vars
-    } catch (exception) {
+
+    } catch (error) {
       showNotification('Wrong username or password', 'error')
     }
   }
 
+  // LOGOUT
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
     blogService.setToken(null)
     setUser(null)
   }
 
+  // CREAR BLOG
   const addBlog = async (blogObject) => {
-  try {
-    const returnedBlog = await blogService.create(blogObject)
+  const returnedBlog = await blogService.create(blogObject)
 
-    setBlogs(blogs.concat(returnedBlog))
-
-    newBlogFormRef.current.toggleVisibility()
-
-    showNotification(
-      `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`
-    )
-  // eslint-disable-next-line no-unused-vars
-  } catch (exception) {
-    showNotification('Error creating blog', 'error')
+  //  asegurar estructura consistente
+  const normalizedBlog = {
+    ...returnedBlog,
+    user: returnedBlog.user || user
   }
+
+  newBlogFormRef.current.toggleVisibility()
+
+  setBlogs(blogs.concat(normalizedBlog))
 }
 
+  // LIKE
+  const likeBlog = async (blog) => {
+
+      console.log('CLICK', blog.title, blog.likes)
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+      user: blog.user.id
+    }
+
+    const returnedBlog = await blogService.update(blog.id, updatedBlog)
+     console.log('SERVER', returnedBlog.likes)
+    setBlogs(prevBlogs =>
+  prevBlogs.map(b => b.id === blog.id ? returnedBlog : b)
+)
+  }
+
+  // DELETE
+  const deleteBlog = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+
+    const ok = window.confirm(
+      `Delete '${blog.title}' by ${blog.author}?`
+    )
+
+    if (!ok) return
+
+    await blogService.remove(id)
+
+    setBlogs(blogs.filter(b => b.id !== id))
+  }
+
+  // LOGIN SCREEN
   if (user === null) {
     return (
       <div className="container">
 
         <h1>Blog App</h1>
 
-        <Notification
-          message={message}
-          type={messageType}
-        />
+        <Notification message={message} type={messageType} />
 
         <div className="card">
 
@@ -107,103 +140,57 @@ const App = () => {
           <form onSubmit={handleLogin}>
 
             <div className="form-group">
-              <label>Username</label>
-
+              <label htmlFor="username">Username</label>
               <input
+                id="username"
                 value={username}
-                onChange={({ target }) =>
-                  setUsername(target.value)
-                }
+                onChange={({ target }) => setUsername(target.value)}
               />
             </div>
 
             <div className="form-group">
-              <label>Password</label>
-
+              <label htmlFor="password">Password</label>
               <input
+                id="password"
                 type="password"
                 value={password}
-                onChange={({ target }) =>
-                  setPassword(target.value)
-                }
+                onChange={({ target }) => setPassword(target.value)}
               />
             </div>
 
-            <button>Login</button>
+            <button type="submit">Login</button>
 
           </form>
 
         </div>
-
       </div>
     )
   }
 
-  const likeBlog = async (blog) => {
-  const updatedBlog = {
-    ...blog,
-    likes: blog.likes + 1,
-    user: blog.user.id, 
-  }
-
-  const returnedBlog = await blogService.update(blog.id, updatedBlog)
-
-   setBlogs(prev =>
-    prev.map(b => b.id === blog.id ? returnedBlog : b)
-  )
-}
-
-const blogsToShow = [...blogs].sort((a, b) => b.likes - a.likes)
-
-const deleteBlog = async (id) => {
-  const blog = blogs.find(b => b.id === id)
-
-  const ok = window.confirm(`Delete '${blog.title}' by ${blog.author}?`)
-  if (!ok) return
-
-  try {
-    await blogService.remove(id)
-    setBlogs(blogs.filter(b => b.id !== id))
-  // eslint-disable-next-line no-unused-vars
-  } catch (error) {
-    showNotification('Error deleting blog', 'error')
-  }
-}
+  // LOGGED VIEW
+  const blogsToShow = [...blogs].sort((a, b) => b.likes - a.likes)
 
   return (
     <div className="container">
 
       <h1>Blog App</h1>
+      
 
-      <Notification
-        message={message}
-        type={messageType}
-      />
+      <Notification message={message} type={messageType} />
 
       <div className="topbar">
         <span>{user.name} logged in</span>
 
-        <button
-          className="logout"
-          onClick={handleLogout}
-        >
+        <button onClick={handleLogout}>
           Logout
         </button>
       </div>
 
-      
       <div className="card">
-  <Togglable
-    buttonLabel="new blog"
-    ref={newBlogFormRef}
-  >
-    <h2>Create new blog</h2>
-
-    <NewBlogForm
-      addBlog={addBlog}
-    />
-  </Togglable>
-</div>
+        <Togglable buttonLabel="new blog" ref={newBlogFormRef}>
+          <NewBlogForm addBlog={addBlog} />
+        </Togglable>
+      </div>
 
       <h2>Blogs</h2>
 
@@ -218,7 +205,6 @@ const deleteBlog = async (id) => {
       ))}
 
     </div>
-    
   )
 }
 

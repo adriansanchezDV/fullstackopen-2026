@@ -18,6 +18,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
     marginBottom: 5,
   }
 
+
   return (
     <div style={blogStyle} className="blog">
 
