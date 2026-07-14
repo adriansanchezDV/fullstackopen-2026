@@ -1,3 +1,5 @@
+/*
+ANTES DE TOOLKIT CON REDUX CLASICO SEPARAR ACTIONS Y REDUCERS
 const generateId = () =>
   Number((Math.random() * 1000000).toFixed(0))
 
@@ -19,4 +21,4 @@ const toggleImportanceOf = (id) => {
   }
 }
 
-export { createNote, toggleImportanceOf } 
+export { createNote, toggleImportanceOf } */
