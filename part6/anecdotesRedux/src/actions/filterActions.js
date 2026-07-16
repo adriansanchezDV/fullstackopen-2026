@@ -1,4 +1,4 @@
-
+/*
 const filterChanged = (filter) => {
   return {
     type: 'SET_FILTER',
@@ -6,4 +6,4 @@ const filterChanged = (filter) => {
   }
 }
 
-export { filterChanged }
+export { filterChanged } */

@@ -1,4 +1,4 @@
-const createAnecdote = content => {
+/*const createAnecdote = content => {
 
   return {
     type: 'CREATE',
@@ -15,3 +15,4 @@ const voteAnecdote = id => {
 }
 
 export { createAnecdote, voteAnecdote }
+*/
