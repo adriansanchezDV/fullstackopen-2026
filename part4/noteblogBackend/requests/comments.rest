@@ -1,0 +1,7 @@
+### Añadir comentario a un blog
+POST http://localhost:3003/api/blogs/6a318552bec134a245a2455e/comments
+Content-Type: application/json
+
+{
+  "comment": "Muy buen artículo, me ha gustado mucho"
+}

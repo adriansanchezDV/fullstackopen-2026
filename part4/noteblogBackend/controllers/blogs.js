@@ -29,12 +29,35 @@ blogsRouter.post("/", middleware.userExtractor, async (req, res, next) => {
 
     const savedBlog = await blog.save();
 
+    user.blogs = user.blogs.concat(savedBlog._id);
+
+    await user.save();
+
     await savedBlog.populate("user", {
       username: 1,
       name: 1,
     });
 
     res.status(201).json(savedBlog);
+  } catch (error) {
+    next(error);
+  }
+});
+blogsRouter.post("/:id/comments", async (request, response, next) => {
+  try {
+    const blog = await Blog.findById(request.params.id);
+
+    if (!blog) {
+      return response.status(404).end();
+    }
+
+    const comment = request.body.comment;
+
+    blog.comments = blog.comments.concat(comment);
+
+    const savedBlog = await blog.save();
+
+    response.status(201).json(savedBlog);
   } catch (error) {
     next(error);
   }
