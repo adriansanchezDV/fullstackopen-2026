@@ -9,8 +9,50 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
 
+  const uniqByTitle = (books) => {
+    const seen = new Set();
+
+    return books.filter((book) => {
+      if (seen.has(book.title)) {
+        return false;
+      }
+
+      seen.add(book.title);
+      return true;
+    });
+  };
+
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    update: (cache, response) => {
+      const addedBook = response.data.addBook;
+
+      cache.updateQuery(
+        {
+          query: ALL_BOOKS,
+        },
+        (data) => {
+          return {
+            allBooks: uniqByTitle(data.allBooks.concat(addedBook)),
+          };
+        },
+      );
+
+      addedBook.genres.forEach((genre) => {
+        cache.updateQuery(
+          {
+            query: ALL_BOOKS,
+            variables: { genre },
+          },
+          (data) => {
+            if (!data) return null;
+
+            return {
+              allBooks: uniqByTitle(data.allBooks.concat(addedBook)),
+            };
+          },
+        );
+      });
+    },
   });
 
   if (!props.show) {

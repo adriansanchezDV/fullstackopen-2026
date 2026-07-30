@@ -10,18 +10,17 @@ const PersonForm = ({ setError }) => {
   const [city, setCity] = useState("");
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    refetchQueries: [
-      {
-        query: ALL_PERSONS,
-      },
-    ],
-
     onError: (error) => {
       const message = error.message;
-
-      console.log("MENSAJE QUE ENVIO A APP:", message);
-
       setError(message);
+    },
+
+    update: (cache, response) => {
+      cache.updateQuery({ query: ALL_PERSONS }, ({ allPersons }) => {
+        return {
+          allPersons: allPersons.concat(response.data.addPerson),
+        };
+      });
     },
   });
 
@@ -32,7 +31,7 @@ const PersonForm = ({ setError }) => {
       await createPerson({
         variables: {
           name,
-          phone,
+          phone: phone.length > 0 ? phone : undefined,
           street,
           city,
         },
