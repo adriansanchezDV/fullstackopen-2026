@@ -4,7 +4,11 @@ import { ALL_BOOKS } from "../queries";
 import { useState } from "react";
 
 const Books = ({ show }) => {
-  const { loading, data } = useQuery(ALL_BOOKS);
+  const { loading, data } = useQuery(ALL_BOOKS, {
+    variables: {
+      genre: null,
+    },
+  });
   const [genre, setGenre] = useState(null);
 
   if (!show) return null;
@@ -12,6 +16,8 @@ const Books = ({ show }) => {
   if (loading) {
     return <div>loading...</div>;
   }
+
+  console.log(data);
 
   const books = data.allBooks;
 

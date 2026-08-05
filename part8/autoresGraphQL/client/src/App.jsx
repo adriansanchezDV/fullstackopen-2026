@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useApolloClient, useSubscription } from "@apollo/client/react";
+import { BOOK_ADDED, ALL_BOOKS } from "./queries";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
@@ -23,6 +25,56 @@ const App = () => {
       setToken(token);
     }
   }, []);
+
+  const client = useApolloClient();
+
+  const uniqByTitle = (books) => {
+    const seen = new Set();
+
+    return books.filter((book) => {
+      if (seen.has(book.title)) {
+        return false;
+      }
+
+      seen.add(book.title);
+      return true;
+    });
+  };
+
+  const updateCache = (addedBook) => {
+    client.cache.updateQuery(
+      {
+        query: ALL_BOOKS,
+        variables: {
+          genre: null,
+        },
+      },
+      (data) => {
+        if (!data) {
+          return {
+            allBooks: [addedBook],
+          };
+        }
+
+        return {
+          allBooks: [...data.allBooks, addedBook],
+        };
+      },
+    );
+  };
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log("SUBSCRIPTION DATA:", data);
+      const addedBook = data.data?.bookAdded;
+
+      if (!addedBook) return;
+
+      window.alert(`Nuevo libro añadido: ${addedBook.title}`);
+
+      updateCache(addedBook);
+    },
+  });
 
   return (
     <div>
