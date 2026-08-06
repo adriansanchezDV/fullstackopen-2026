@@ -13,7 +13,7 @@ export const calculateBmi = (height: number, weight: number): string => {
   return "Obese (Class III)";
 };
 
-try {
+/*try {
   const args = process.argv.slice(2);
 
   if (args.length !== 2) {
@@ -32,4 +32,4 @@ try {
   if (error instanceof Error) {
     console.log(error.message);
   }
-}
+}*/
