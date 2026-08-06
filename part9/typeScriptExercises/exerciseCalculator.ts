@@ -50,7 +50,7 @@ export const calculateExercises = (
   };
 };
 
-try {
+/*try {
   const args = process.argv.slice(2);
 
   if (args.length < 2) {
@@ -73,4 +73,4 @@ try {
   } else {
     console.log("Unknown error");
   }
-}
+}*/

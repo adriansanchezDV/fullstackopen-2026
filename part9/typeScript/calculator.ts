@@ -1,6 +1,6 @@
-type Operation = "multiply" | "add" | "divide";
+export type Operation = "multiply" | "add" | "divide";
 
-const calculator = (
+export const calculator = (
   a: number,
   b: number,
   op: Operation
@@ -23,6 +23,8 @@ const calculator = (
       throw new Error("Operation is not multiply, add or divide!");
   }
 };
+
+/*
 try {
   console.log(calculator(10, 0, "divide"));
 } catch (error: unknown) {
@@ -33,4 +35,4 @@ try {
   }
 
   console.log(errorMessage);
-}
+}*/

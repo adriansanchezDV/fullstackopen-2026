@@ -1,0 +1,41 @@
+POST http://localhost:3003/calculate
+Content-Type: application/json
+
+{
+    "value1": 10,
+    "value2": 5,
+    "op": "multiply"
+}
+
+###
+
+POST http://localhost:3003/calculate
+Content-Type: application/json
+
+{
+    "value1": 10,
+    "value2": 5,
+    "op": "divide"
+}
+
+###
+
+POST http://localhost:3003/calculate
+Content-Type: application/json
+
+{
+    "value1": 10,
+    "value2": 5,
+    "op": "add"
+}
+
+###
+
+POST http://localhost:3003/calculate
+Content-Type: application/json
+
+{
+    "value1": "hola",
+    "value2": [],
+    "op": true
+}
