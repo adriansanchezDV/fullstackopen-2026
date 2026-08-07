@@ -1,0 +1,43 @@
+POST http://localhost:3000/api/diaries
+Content-Type: application/json
+
+{
+  "date": "2026-08-07",
+  "weather": "sunny",
+  "visibility": "great",
+  "comment": "Nice flight"
+}
+
+###
+
+POST http://localhost:3000/api/diaries
+Content-Type: application/json
+
+{
+  "date": "2026-08-08",
+  "weather": "rainy",
+  "visibility": "poor",
+  "comment": "Difficult landing because of the rain"
+}
+
+###
+
+POST http://localhost:3000/api/diaries
+Content-Type: application/json
+
+{
+  "date": "2026-08-07",
+  "weather": "pizza",
+  "visibility": "great",
+  "comment": "Nice flight"
+}
+
+
+### POST http://localhost:3000/api/diaries
+Content-Type: application/json
+
+{
+  "date": "2026-08-07",
+  "weather": "sunny",
+  "visibility": "great"
+}
