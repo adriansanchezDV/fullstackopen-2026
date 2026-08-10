@@ -1,17 +1,11 @@
+import { type TotalProps } from '../types';
 
-export type TotalProps = {
-    totalExercises: number;
-  };
-
-
- const Total = ({ totalExercises }: TotalProps) => {
+const Total = ({ totalExercises }: TotalProps) => {
   return (
-    <div>
-         <p>
-        Number of exercises {totalExercises}
-      </p>
-    </div>
-    )}
+    <p>
+      Number of exercises {totalExercises}
+    </p>
+  );
+};
 
-
-    export default Total;
+export default Total;
