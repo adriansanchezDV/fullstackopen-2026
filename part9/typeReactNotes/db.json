@@ -1,0 +1,16 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "Esto viene del servidor"
+    },
+    {
+      "id": 2,
+      "content": "Estamos aprendiendo TypeScript"
+    },
+    {
+      "content": "hola",
+      "id": 3
+    }
+  ]
+}
